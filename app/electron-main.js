@@ -67,7 +67,7 @@ ipcMain.on("maximize-window", () => {
   }
 });
 
-ipcMain.on("close-window", () => {
-  mainWindow.close(); // Close the main window
-  process.exit(0);
-});
+app.on('window-all-closed', function() {
+  app.quit();
+  return;
+})
