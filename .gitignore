@@ -1,0 +1,10 @@
+penguinmod.github.io/
+app/build/
+linux-base
+windows-base
+windows.zip
+linux.zip
+penguinmod-linux.zip
+penguinmod-windows.zip
+packager-app
+node_modules

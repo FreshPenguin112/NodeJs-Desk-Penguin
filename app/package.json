@@ -1,0 +1,20 @@
+{
+  "name": "pmdesktop",
+  "main": "electron-main.js",
+  "version": "1.0.0",
+  "build": {
+    "fileAssociations": [
+      {
+        "ext": "pmp",
+        "name": "Penguinmod Project",
+        "description": "Penguinmod Project File",
+        "mimeType": "application/x-pmp",
+        "icon": "./icon.ico"
+      }
+    ]
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  }
+}
