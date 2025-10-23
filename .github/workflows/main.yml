@@ -120,10 +120,17 @@ jobs:
           zip -r penguinmod-linux.zip linux-base
           zip -r penguinmod-windows.zip windows-base
 
-      - name: Upload artifacts
+      - name: Upload linux zip
         uses: actions/upload-artifact@v4
         with:
-          name: penguinmod-zips
+          name: nodejs-deskpenguin-linux
           path: |
             penguinmod-linux.zip
+      
+      - name: Upload windows zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: nodejs-deskpenguin-windows
+          path: |
             penguinmod-windows.zip
+          
