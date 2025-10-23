@@ -69,24 +69,6 @@ bun run --silent build
 sleep 5s
 cp -R build ../app
 
-echo "=== Building Packager ==="
-git clone --depth=1 https://github.com/FreshPenguin112/PenguinMod-Packager.git
-cd PenguinMod-Packager
-git pull
-bun i --force
-cd ..
-# Copy dependencies
-for mod in Vm Blocks Render Paint; do
-    cp -R "PenguinMod-$mod" PenguinMod-Packager/node_modules
-    rm -rf "PenguinMod-Packager/node_modules/scratch-$(echo "$mod" | tr '[:upper:]' '[:lower:]')"
-    mv "PenguinMod-Packager/node_modules/PenguinMod-$mod" "PenguinMod-Packager/node_modules/scratch-$(echo "$mod" | tr '[:upper:]' '[:lower:]')"
-done
-cd PenguinMod-Packager
-bun run --silent build
-cd ../..
-
-cp -R penguinmod.github.io/PenguinMod-Packager/dist app/build/packager-app
-
 echo "=== Packaging Electron builds ==="
 cp -R app linux-base/resources/
 cp -R app windows-base/resources/
