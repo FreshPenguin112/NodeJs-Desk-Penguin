@@ -122,23 +122,18 @@ jobs:
           cp -R app windows-base/resources/
           mv linux-base/electron linux-base/penguinmod-desktop
           mv windows-base/electron.exe windows-base/penguinmod-desktop.exe
-
-      - name: Zip packages
-        run: |
-          zip -r penguinmod-linux.zip linux-base
-          zip -r penguinmod-windows.zip windows-base
-
+          
       - name: Upload linux zip
         uses: actions/upload-artifact@v4
         with:
           name: nodejs-deskpenguin-linux
           path: |
-            penguinmod-linux.zip
+            linux-base
       
       - name: Upload windows zip
         uses: actions/upload-artifact@v4
         with:
           name: nodejs-deskpenguin-windows
           path: |
-            penguinmod-windows.zip
+            windows-base
           
