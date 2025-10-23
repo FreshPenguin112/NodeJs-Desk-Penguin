@@ -6,6 +6,11 @@ if [ -z "$TAG" ]; then
   exit 1
 fi
 
+if [ -z "$DESC" ]; then
+  echo "DESC is not set."
+  exit 1
+fi
+
 if ! gh auth status >/dev/null 2>&1; then
   echo "GitHub CLI not authenticated. Please run 'gh auth login'."
   exit 1
@@ -28,7 +33,7 @@ if gh release view "$TAG" >/dev/null 2>&1; then
   echo "Release $TAG already exists. Updating..."
 else
   echo "Creating release for tag $TAG"
-  gh release create "$TAG" --title "Release $TAG" --notes "Automated build for $TAG"
+  gh release create "$TAG" --title "Release $TAG" --notes "$DESC"
 fi
 
 # Upload zips

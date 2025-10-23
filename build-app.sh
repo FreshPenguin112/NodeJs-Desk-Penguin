@@ -66,8 +66,8 @@ mv node_modules/PenguinMod-Paint node_modules/scratch-paint
 
 echo "=== Building PenguinMod ==="
 bun run --silent build
-sleep 5s
 cp -R build ../app
+cd ..
 
 echo "=== Packaging Electron builds ==="
 cp -R app linux-base/resources/
