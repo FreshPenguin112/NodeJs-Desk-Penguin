@@ -1,54 +1,31 @@
-clear
-echo "Clearing packages"
-rm -rf packager-app
-rm -rf app/build
-rm -rf linux-base
-rm -rf windows-base
-rm -rf penguinmod-linux.zip
-rm -rf penguinmod-windows.zip
-rm -rf penguinmod.github.io
+#!/usr/bin/env bash
+set -e
 
-echo "Downloading Electron - Linux"
+echo "=== Cleaning old builds ==="
+rm -rf packager-app app/build linux-base windows-base penguinmod-linux.zip penguinmod-windows.zip penguinmod.github.io
 
-#Linux
-curl -L https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-linux-x64.zip > linux.zip
-unzip linux.zip -d linux-base
-rm -rf linux.zip
-rm -rf linux-base/resources/default_app.asar
-echo "Downloading Electron - Windows"
-#Windows
-curl -L https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-win32-ia32.zip > windows.zip
-unzip windows.zip -d windows-base
-rm -rf windows.zip
-rm -rf windows-base/resources/default_app.asar
+echo "=== Downloading Electron ==="
+# Linux
+curl -L https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-linux-x64.zip -o linux.zip
+unzip -q linux.zip -d linux-base
+rm -f linux.zip
+rm -f linux-base/resources/default_app.asar
 
-#PM base
-echo "Downloading PenguinMod"
+# Windows
+curl -L https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-win32-ia32.zip -o windows.zip
+unzip -q windows.zip -d windows-base
+rm -f windows.zip
+rm -f windows-base/resources/default_app.asar
+
+echo "=== Cloning PenguinMod GUI ==="
 export NODE_OPTIONS=--openssl-legacy-provider
-read -p "Do you want to use a custom GUI made for the desktop app? Using the vanilla UI could cause issues (Y/N)" -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    git clone --depth=1 https://github.com/TheShovel/brandless-penguin.git
-    mv brandless-penguin penguinmod.github.io
-else
-    git clone --depth=1 https://github.com/PenguinMod/penguinmod.github.io.git
-fi
+git clone --depth=1 https://github.com/PenguinMod/penguinmod.github.io.git
 cd penguinmod.github.io
 git pull
 bun i --force
 
-#VM
-echo "Adding VM"
-read -p "Use modified VM version? (Y/N)" -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-git clone --depth=1 https://github.com/TheShovel/Stable-PM-VM.git
-mv Stable-PM-VM PenguinMod-Vm
-else
+echo "=== Adding VM ==="
 git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Vm.git
-fi
 cd PenguinMod-Vm
 git pull
 bun i --force
@@ -57,37 +34,18 @@ cp -R PenguinMod-Vm node_modules
 rm -rf node_modules/scratch-vm
 mv node_modules/PenguinMod-Vm node_modules/scratch-vm
 
-#BLOCKS
-echo "Adding Blocks"
-read -p "Use modified Blocks version? (Y/N)" -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-git clone --depth=1 https://github.com/TheShovel/Stable-PM-Blocks.git
-mv Stable-PM-Blocks PenguinMod-Blocks
-else
+echo "=== Adding Blocks ==="
 git clone --depth=1 -b develop-builds https://github.com/PenguinMod/PenguinMod-Blocks.git
-fi
 cd PenguinMod-Blocks
 git pull
 bun i --force
-#bun run prepublish
 cd ..
 cp -R PenguinMod-Blocks node_modules
 rm -rf node_modules/scratch-blocks
 mv node_modules/PenguinMod-Blocks node_modules/scratch-blocks
 
-#RENDERER
-echo "Adding Renderer"
-read -p "Use safe Renderer version? (Y/N)" -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    git clone --depth=1 https://github.com/TheShovel/Stable-PM-Render.git
-else
-    git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Render.git
-fi
-mv Stable-PM-Render PenguinMod-Render
+echo "=== Adding Renderer ==="
+git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Render.git
 cd PenguinMod-Render
 git pull
 bun i --force
@@ -96,8 +54,7 @@ cp -R PenguinMod-Render node_modules
 rm -rf node_modules/scratch-render
 mv node_modules/PenguinMod-Render node_modules/scratch-render
 
-#PAINT
-echo "Adding Paint"
+echo "=== Adding Paint ==="
 git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Paint.git
 cd PenguinMod-Paint
 git pull
@@ -107,44 +64,38 @@ cp -R PenguinMod-Paint node_modules
 rm -rf node_modules/scratch-paint
 mv node_modules/PenguinMod-Paint node_modules/scratch-paint
 
-echo "Building PenguinMod"
+echo "=== Building PenguinMod ==="
 bun run --silent build
 sleep 5s
 cp -R build ../app
+
+echo "=== Building Packager ==="
 git clone --depth=1 https://github.com/FreshPenguin112/PenguinMod-Packager.git
 cd PenguinMod-Packager
 git pull
 bun i --force
 cd ..
-#vm
-cp -R PenguinMod-Vm PenguinMod-Packager/node_modules
-rm -rf PenguinMod-Packager/node_modules/scratch-vm
-mv PenguinMod-Packager/node_modules/PenguinMod-Vm PenguinMod-Packager/node_modules/scratch-vm
-#blocks
-cp -R PenguinMod-Blocks PenguinMod-Packager/node_modules
-rm -rf PenguinMod-Packager/node_modules/scratch-blocks
-mv PenguinMod-Packager/node_modules/PenguinMod-Blocks PenguinMod-Packager/node_modules/scratch-blocks
-#renderer
-cp -R PenguinMod-Render PenguinMod-Packager/node_modules
-rm -rf PenguinMod-Packager/node_modules/scratch-render
-mv PenguinMod-Packager/node_modules/PenguinMod-Render PenguinMod-Packager/node_modules/scratch-render
-#paint
-cp -R PenguinMod-Paint PenguinMod-Packager/node_modules
-rm -rf PenguinMod-Packager/node_modules/scratch-paint
-mv PenguinMod-Packager/node_modules/PenguinMod-Paint PenguinMod-Packager/node_modules/scratch-paint
+# Copy dependencies
+for mod in Vm Blocks Render Paint; do
+    cp -R "PenguinMod-$mod" PenguinMod-Packager/node_modules
+    rm -rf "PenguinMod-Packager/node_modules/scratch-$(echo "$mod" | tr '[:upper:]' '[:lower:]')"
+    mv "PenguinMod-Packager/node_modules/PenguinMod-$mod" "PenguinMod-Packager/node_modules/scratch-$(echo "$mod" | tr '[:upper:]' '[:lower:]')"
+done
 cd PenguinMod-Packager
 bun run --silent build
-cd ..
-cd ..
+cd ../..
+
 cp -R penguinmod.github.io/PenguinMod-Packager/dist app/build/packager-app
+
+echo "=== Packaging Electron builds ==="
 cp -R app linux-base/resources/
 cp -R app windows-base/resources/
 mv linux-base/electron linux-base/penguinmod-desktop
 mv windows-base/electron.exe windows-base/penguinmod-desktop.exe
-read -p "Do you want to zip the Electron packages? (Y/N)" -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    zip -r penguinmod-linux.zip linux-base
-    zip -r penguinmod-windows.zip windows-base
-fi
+
+echo "=== Zipping Electron packages ==="
+zip -qr penguinmod-linux.zip linux-base
+zip -qr penguinmod-windows.zip windows-base
+
+echo "=== Build complete! ==="
+ls -lh penguinmod-*.zip
