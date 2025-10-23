@@ -104,20 +104,8 @@ jobs:
         run: |
           cd penguinmod.github.io
           bun run --silent build
-          sleep 5
           cp -R build ../app
-          git clone --depth=1 https://github.com/FreshPenguin112/PenguinMod-Packager.git
-          cd PenguinMod-Packager && git pull && bun i --force
           cd ..
-          for comp in PenguinMod-Vm PenguinMod-Blocks PenguinMod-Render PenguinMod-Paint; do
-            cp -R $comp PenguinMod-Packager/node_modules
-            rm -rf PenguinMod-Packager/node_modules/scratch-${comp##PenguinMod-}
-            mv PenguinMod-Packager/node_modules/$comp PenguinMod-Packager/node_modules/scratch-${comp##PenguinMod-}
-          done
-          cd PenguinMod-Packager
-          bun run --silent build
-          cd ../..
-          cp -R penguinmod.github.io/PenguinMod-Packager/dist app/build/packager-app
           cp -R app linux-base/resources/
           cp -R app windows-base/resources/
           mv linux-base/electron linux-base/penguinmod-desktop
