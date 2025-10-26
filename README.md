@@ -1,7 +1,7 @@
 # THIS IS A FORK OF [Desk-Penguin](https://github.com/TheShovel/Desk-Penguin/)
 
 # Desk-Penguin
- [PenguinMod](https://penguinmod.com) native offline desktop app for Linux and Windows
+ [PenguinMod](https://penguinmod.com) native offline desktop app for Linux and Windows, now supporting NodeJs!
 # Dependencies
 - unzip
 - zip
@@ -14,15 +14,10 @@ like WSL (Windows Subsystem for Linux).<br><br>
 MacOS is not supported as I can't test the packages on that!! (certified Apple moment)
 
 # How to use
-Just open your terminal in the folder of the repositry and run the script with
+Just open your terminal in the folder of the repository and run the script with
 ```
 ./build-app.sh
 ```
-Thats it! During the process it will ask you if you want to create zip files for the builds.
-You can answer with Y or N (Y = Yes and N = No)
 
 # Downloads
-Don't want to build this yourself? You can find pre-built packages here:<br>
-(moved to mega nz because im not shovel lol)
-[Linux](<https://mega.nz/file/r4pW3bLT#yGCSBezUATGeJ5rU-buClXtM6wuuqM0ikEUhtEIzb00>)
-[Windows](<https://mega.nz/file/a0YhBbwT#sAwgkWJRevk2e0jye7mBZnh_rWZk61BoAJX6fzqhNHs>)
+Don't want to build this yourself? You can find pre-built executables here in the github releases(stable builds) or the github action runs artifacts(source builds, may or may not be stable)
