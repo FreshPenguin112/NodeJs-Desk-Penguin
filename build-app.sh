@@ -6,13 +6,13 @@ rm -rf packager-app app/build linux-base windows-base penguinmod-linux.zip pengu
 
 echo "=== Downloading Electron ==="
 # Linux
-curl -L https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-linux-x64.zip -o linux.zip
+curl -L https://github.com/electron/electron/releases/download/v38.4.0/electron-v38.4.0-linux-x64.zip -o linux.zip
 unzip -q linux.zip -d linux-base
 rm -f linux.zip
 rm -f linux-base/resources/default_app.asar
 
 # Windows
-curl -L https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-win32-ia32.zip -o windows.zip
+curl -L https://github.com/electron/electron/releases/download/v38.4.0/electron-v38.4.0-win32-ia32.zip -o windows.zip
 unzip -q windows.zip -d windows-base
 rm -f windows.zip
 rm -f windows-base/resources/default_app.asar
