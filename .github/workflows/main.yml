@@ -3,6 +3,9 @@ name: Build
 on:
   workflow_dispatch:
   push:
+  schedule:
+    # Run every day at midnight CST (UTC−6), ignoring daylight savings time
+    - cron: '0 6 * * *'
 
 jobs:
   build:
