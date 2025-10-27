@@ -21,21 +21,6 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
 
-      - name: Cache Bun dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun
-          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: bun-${{ runner.os }}-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: bun-node-modules-cache
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-bun-modules-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-modules-
-
       - name: Install unzip and zip
         run: sudo apt-get update && sudo apt-get install -y unzip zip curl git
 
