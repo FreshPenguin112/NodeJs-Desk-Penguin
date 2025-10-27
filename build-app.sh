@@ -65,7 +65,7 @@ rm -rf node_modules/scratch-paint
 mv node_modules/PenguinMod-Paint node_modules/scratch-paint
 
 echo "=== Building PenguinMod ==="
-bun run --silent build
+NODE_ENV="production" bun run --silent build
 cp -R build ../app
 cd ..
 
