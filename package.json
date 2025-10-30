@@ -1,5 +1,63 @@
 {
-  "dependencies": {
-    "discord.js": "^14.24.0"
+  "name": "nodejs-penguinmod-desktop",
+  "author": "FreshPenguin112 <freshpenguin112@gmail.com>",
+  "description": "A fork of TheShovel's Desk-Penguin that supports Node.js",
+  "version": "1.0.0",
+  "main": "app/electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:fast": "electron-builder --config.compression=store --publish never --dir"
+  },
+  "build": {
+    "appId": "com.freshpenguin112.nodejs-desk-penguin",
+    "productName": "NodeJS Desk Penguin",
+    "directories": {
+      "output": "builds"
+    },
+    "files": [
+      "app/**/*"
+    ],
+    "compression": "maximum",
+    "linux": {
+      "category": "Development",
+      "icon": "app/icon.png",
+      "maintainer": "FreshPenguin112 <freshpenguin112@gmail.com>",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64", "arm64", "armv7l"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64", "arm64", "armv7l"]
+        },
+        {
+          "target": "rpm",
+          "arch": ["x64", "arm64", "armv7l"]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32", "arm64"]
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    },
+    "publish": null
+  },
+  "devDependencies": {
+    "electron": "^38.4.0",
+    "electron-builder": "^26.0.12"
   }
 }

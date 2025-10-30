@@ -1,21 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+APP_NAME="penguinmod-desktop"
+BUILD_DIR="$(pwd)/builds"
+
 echo "=== Cleaning old builds ==="
-rm -rf packager-app app/build linux-base windows-base penguinmod-linux.zip penguinmod-windows.zip penguinmod.github.io
-
-echo "=== Downloading Electron ==="
-# Linux
-curl -L https://github.com/electron/electron/releases/download/v38.4.0/electron-v38.4.0-linux-x64.zip -o linux.zip
-unzip -q linux.zip -d linux-base
-rm -f linux.zip
-rm -f linux-base/resources/default_app.asar
-
-# Windows
-curl -L https://github.com/electron/electron/releases/download/v38.4.0/electron-v38.4.0-win32-ia32.zip -o windows.zip
-unzip -q windows.zip -d windows-base
-rm -f windows.zip
-rm -f windows-base/resources/default_app.asar
+rm -rf packager-app app/build linux-base windows-base penguinmod.github.io "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
 
 echo "=== Cloning PenguinMod GUI ==="
 export NODE_OPTIONS=--openssl-legacy-provider
@@ -69,15 +60,8 @@ NODE_ENV="production" bun run --silent build
 cp -R build ../app
 cd ..
 
-echo "=== Packaging Electron builds ==="
-cp -R app linux-base/resources/
-cp -R app windows-base/resources/
-mv linux-base/electron linux-base/penguinmod-desktop
-mv windows-base/electron.exe windows-base/penguinmod-desktop.exe
+echo "=== Packaging all platforms with electron-builder ==="
+bun exec electron-builder --config electron-builder.json
 
-echo "=== Zipping Electron packages ==="
-zip -qr penguinmod-linux.zip linux-base
-zip -qr penguinmod-windows.zip windows-base
-
-echo "=== Build complete! ==="
-ls -lh penguinmod-*.zip
+echo "=== All builds complete! ==="
+ls -lh "$BUILD_DIR"

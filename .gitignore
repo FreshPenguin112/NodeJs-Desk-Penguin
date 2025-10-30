@@ -8,3 +8,8 @@ penguinmod-linux.zip
 penguinmod-windows.zip
 packager-app
 node_modules
+cache
+builds
+dist
+*.lock
+package-lock.json
