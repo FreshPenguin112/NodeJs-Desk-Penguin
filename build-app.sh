@@ -10,13 +10,13 @@ mkdir -p "$BUILD_DIR"
 
 echo "=== Cloning PenguinMod GUI ==="
 export NODE_OPTIONS=--openssl-legacy-provider
-git clone --depth=1 https://github.com/PenguinMod/penguinmod.github.io.git
+git clone --depth=1 https://github.com/PenguinMod/penguinmod.github.io
 cd penguinmod.github.io
 git pull
 bun i --force
 
 echo "=== Adding VM ==="
-git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Vm.git
+git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Vm
 cd PenguinMod-Vm
 git pull
 bun i --force
@@ -26,7 +26,7 @@ rm -rf node_modules/scratch-vm
 mv node_modules/PenguinMod-Vm node_modules/scratch-vm
 
 echo "=== Adding Blocks ==="
-git clone --depth=1 -b develop-builds https://github.com/PenguinMod/PenguinMod-Blocks.git
+git clone --depth=1 -b develop-builds https://github.com/PenguinMod/PenguinMod-Blocks
 cd PenguinMod-Blocks
 git pull
 bun i --force
@@ -36,7 +36,7 @@ rm -rf node_modules/scratch-blocks
 mv node_modules/PenguinMod-Blocks node_modules/scratch-blocks
 
 echo "=== Adding Renderer ==="
-git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Render.git
+git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Render
 cd PenguinMod-Render
 git pull
 bun i --force
@@ -46,7 +46,7 @@ rm -rf node_modules/scratch-render
 mv node_modules/PenguinMod-Render node_modules/scratch-render
 
 echo "=== Adding Paint ==="
-git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Paint.git
+git clone --depth=1 https://github.com/PenguinMod/PenguinMod-Paint
 cd PenguinMod-Paint
 git pull
 bun i --force

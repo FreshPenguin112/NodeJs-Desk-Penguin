@@ -19,6 +19,8 @@
       "app/**/*"
     ],
     "compression": "maximum",
+    "npmRebuild": false,
+    "publish": null,
     "linux": {
       "category": "Development",
       "icon": "app/icon.png",
@@ -44,17 +46,10 @@
           "target": "nsis",
           "arch": ["x64", "ia32", "arm64"]
         }
-      ]
-    },
-    "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": ["x64", "arm64"]
-        }
-      ]
-    },
-    "publish": null
+      ],
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false
+    }
   },
   "devDependencies": {
     "electron": "^38.4.0",
