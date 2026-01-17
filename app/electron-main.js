@@ -6,10 +6,6 @@ const path = require('path');
 let mainWindow = null;
 let isQuitting = false;
 
-/* -------------------------------------------------- */
-/* Protocol setup (THIS is what fixes blob URLs)      */
-/* -------------------------------------------------- */
-
 protocol.registerSchemesAsPrivileged([
   {
     scheme: 'app',
@@ -26,10 +22,16 @@ protocol.registerSchemesAsPrivileged([
 
 app.whenReady().then(() => {
   protocol.handle('app', (request) => {
-    const url = new URL(request.url);
-    const filePath = path.join(__dirname, decodeURIComponent(url.pathname));
-    return net.fetch(`file://${filePath}`);
-  });
+  const url = new URL(request.url);
+
+  // IMPORTANT: remove leading slash
+  const relativePath = decodeURIComponent(url.pathname).replace(/^\/+/, '');
+
+  const filePath = path.join(__dirname, relativePath);
+
+  return net.fetch(`file://${filePath}`);
+});
+
 
   createWindow(process.argv[2] || 'index.html');
 });
