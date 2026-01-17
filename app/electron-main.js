@@ -2,6 +2,7 @@
 
 const { app, BrowserWindow, ipcMain, protocol, net } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 let mainWindow = null;
 let isQuitting = false;
@@ -21,25 +22,38 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 app.whenReady().then(() => {
-  protocol.handle('app', (request) => {
-  const url = new URL(request.url);
+  protocol.handle('app', async (request) => {
+    try {
+      const url = new URL(request.url);
 
-  // IMPORTANT: remove leading slash
-  const relativePath = decodeURIComponent(url.pathname).replace(/^\/+/, '');
+      // pathname can be "/" or "/index.html"
+      let pathname = decodeURIComponent(url.pathname);
 
-  const filePath = path.join(__dirname, relativePath);
+      if (pathname === '/' || pathname === '') {
+        pathname = '/index.html';
+      }
 
-  return net.fetch(`file://${filePath}`);
-});
+      // strip leading slash
+      const relativePath = pathname.replace(/^\/+/, '');
+      const filePath = path.join(__dirname, relativePath);
 
+      if (!fs.existsSync(filePath)) {
+        console.error('[app://] file not found:', filePath);
+        return new Response('Not found', { status: 404 });
+      }
+
+      // IMPORTANT: net.fetch needs a valid file:// URL
+      const fileUrl = `file://${filePath}`;
+      return net.fetch(fileUrl);
+
+    } catch (err) {
+      console.error('[app://] handler error:', err);
+      return new Response('Protocol error', { status: 500 });
+    }
+  });
 
   createWindow(process.argv[2] || 'index.html');
 });
-
-/* -------------------------------------------------- */
-/* Window creation                                    */
-/* -------------------------------------------------- */
-
 function createWindow(startFile) {
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.destroy();
@@ -66,15 +80,14 @@ function createWindow(startFile) {
     mainWindow = null;
   });
 
-  const startUrl = `app://${startFile}`;
+  // NOTE: always use triple-slash form
+  const startUrl = `app:///${startFile}`;
+  console.log('[main] loading', startUrl);
+
   mainWindow.loadURL(startUrl).catch(err => {
     console.error('[main] loadURL failed:', err);
   });
 }
-
-/* -------------------------------------------------- */
-/* Safe reload (no injection needed)                  */
-/* -------------------------------------------------- */
 
 ipcMain.on('renderer-request-reload', () => {
   if (isQuitting) return;
@@ -88,10 +101,6 @@ ipcMain.on('renderer-request-reload', () => {
   }
 });
 
-/* -------------------------------------------------- */
-/* Quit handling                                      */
-/* -------------------------------------------------- */
-
 app.on('before-quit', () => {
   isQuitting = true;
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -103,10 +112,6 @@ app.on('before-quit', () => {
 app.on('window-all-closed', () => {
   app.quit();
 });
-
-/* -------------------------------------------------- */
-/* Safety logging                                     */
-/* -------------------------------------------------- */
 
 process.on('uncaughtException', err => {
   console.error('[main] uncaughtException:', err);
